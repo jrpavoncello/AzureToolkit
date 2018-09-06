@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome",
+            "url": "https://localhost:5001",
+            "webRoot": "${workspaceFolder}",
+            "sourceMaps": true,
+        },
+        {
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
@@ -15,7 +23,7 @@
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
-                "enabled": true,
+                "enabled": false,
                 "args": "${auto-detect-url}",
                 "windows": {
                     "command": "cmd.exe",
@@ -32,14 +40,22 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
+                "/Views": "${workspaceFolder}/Views",
+            },
         },
         {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
+            "type": "chrome",
             "request": "attach",
-            "processId": "${command:pickProcess}"
+            "name": "Attach to Chrome",
+            "port": 5001,
+            "url": "https://localhost:5001",
+            "webRoot": "${workspaceFolder}"
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Full stack",
+            "configurations": [".NET Core Launch (web)", "Launch Chrome"]
         }
     ]
 }
