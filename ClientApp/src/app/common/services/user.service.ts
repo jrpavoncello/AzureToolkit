@@ -8,11 +8,11 @@ import { User, AADUser } from '../models/user';
 
 @Injectable()
 export class UserService {
-    private originUrl: string;
+    private baseUrl: string;
     private aadUser: AADUser;
 
-    constructor(private http: HttpClient, @Inject('ORIGIN_URL')originUrl: string) {
-        this.originUrl = originUrl;
+    constructor(private http: HttpClient, @Inject('BASE_URL')originUrl: string) {
+        this.baseUrl = originUrl;
     }
 
     private handleError(error: any): Promise<any> {
@@ -21,7 +21,7 @@ export class UserService {
     }
 
     public getUser(): Observable<User> {
-        return this.http.get(`${this.originUrl}/.auth/me`)
+        return this.http.get(`${this.baseUrl}.auth/me`)
             .map(response => {
                 try {
                     this.aadUser = response[0] as AADUser;
