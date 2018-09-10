@@ -23,9 +23,8 @@ namespace WebApplicationBasic.Controllers
             this.config = config;
             this.context = context;
 
-            var storageCredentials = config.GetSection("StorageCredentials");
-            var accountName = storageCredentials.GetValue<string>("accountName");
-            var keyValue = storageCredentials.GetValue<string>("keyValue");
+            var accountName = config.GetValue<string>("StorageCredentials.accountName");
+            var keyValue = config.GetValue<string>("StorageCredentials.keyValue");
 
             CloudStorageAccount storageAccount = new CloudStorageAccount(
                 new StorageCredentials(accountName, keyValue), 
