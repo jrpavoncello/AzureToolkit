@@ -1,28 +1,40 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import { AzureHttpClient } from './azureHttpClient';
+import { AzureToolkitService } from './azureToolkit.service';
 import { BingSearchResponse } from '../models/bingSearchResponse';
 import { ComputerVisionRequest, ComputerVisionResponse } from '../models/computerVisionResponse';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 @Injectable()
 export class CognitiveService {
-    bingSearchAPIKey = '03ad710284bc49cdaba0da8f81e82572';
-    computerVisionAPIKey = '37ef3a19f1fc4b579cbe59526ace48a9';
 
     constructor(private http: AzureHttpClient) { }
 
-    searchImages(searchTerm: string): Observable<BingSearchResponse> {
-        return this.http.get(`https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=${searchTerm}`, this.bingSearchAPIKey)
+    searchImages(bingSearchApiKey: string, searchTerm: string): Observable<BingSearchResponse> {
+        if (bingSearchApiKey === null) {
+            const errorMsg = 'Bing search API key was null.';
+            console.error(errorMsg);
+            return new ErrorObservable(errorMsg);
+        }
+
+        return this.http.get(`https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=${searchTerm}`, bingSearchApiKey)
             .map(response => response as BingSearchResponse)
             .catch(this.handleError);
     }
 
-    analyzeImage(request: ComputerVisionRequest): Observable<ComputerVisionResponse> {
+    analyzeImage(computerVisionAPIKey: string, request: ComputerVisionRequest): Observable<ComputerVisionResponse> {
+        if (computerVisionAPIKey === null) {
+            const errorMsg = 'Bing computer vision API key was null.';
+            console.error(errorMsg);
+            return new ErrorObservable(errorMsg);
+        }
+
         return this.http.post('https://eastus.api.cognitive.microsoft.com/vision/v1.0/analyze?visualFeatures=Description,Tags',
-            this.computerVisionAPIKey, request)
+            computerVisionAPIKey, request)
             .map(response => response as ComputerVisionResponse)
             .catch(this.handleError);
     }

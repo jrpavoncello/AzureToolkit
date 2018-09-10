@@ -1,15 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CognitiveService } from '../common/services/cognitive.service';
 import { AzureToolkitService } from '../common/services/azureToolkit.service';
 import { ImageResult } from '../common/models/bingSearchResponse';
 import { ComputerVisionRequest, ComputerVisionResponse } from '../common/models/computerVisionResponse';
+import { SettingsRequest } from '../common/models/settingsResponse';
 
 @Component({
     selector: 'search',
     templateUrl: './search.component.html',
     styleUrls: ['./search.component.css']
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
+    bingSearchApiKey: string | null = null;
+    computerVisionAPIKey: string | null = null;
     searchResults: ImageResult[] | null;
     isSearching = false;
 
@@ -24,7 +27,7 @@ export class SearchComponent {
         this.searchResults = null;
         this.currentAnalytics = null;
         this.isSearching = true;
-        this.cognitiveService.searchImages(searchTerm).subscribe(result => {
+        this.cognitiveService.searchImages(this.bingSearchApiKey, searchTerm).subscribe(result => {
             this.searchResults = result.value;
             this.isSearching = false;
         });
@@ -35,7 +38,11 @@ export class SearchComponent {
         this.currentItemSaved = false;
         this.currentAnalytics = null;
         this.isAnalyzing = true;
-        this.cognitiveService.analyzeImage({ url: result.thumbnailUrl } as ComputerVisionRequest).subscribe(result => {
+        this.cognitiveService
+        .analyzeImage(
+            this.computerVisionAPIKey,
+            { url: result.thumbnailUrl } as ComputerVisionRequest)
+        .subscribe(result => {
             this.currentAnalytics = result;
             this.isAnalyzing = false;
         });
@@ -43,13 +50,22 @@ export class SearchComponent {
     }
 
     saveImage() {
-        const transferObject = {
+        const request = {
             url: this.currentItem.thumbnailUrl,
             encodingFormat: this.currentItem.encodingFormat,
             id: this.currentItem.imageId
         };
-        this.azureToolkitService.saveImage(transferObject).subscribe(saveSuccessful => {
+        this.azureToolkitService.saveImage(request).subscribe(saveSuccessful => {
             this.currentItemSaved = saveSuccessful;
         });
+    }
+
+    ngOnInit(): void {
+        this.azureToolkitService
+            .getSettings({ token: '' } as SettingsRequest)
+            .subscribe(response => {
+                this.bingSearchApiKey = response.bingSearchApiKey;
+                this.computerVisionAPIKey = response.computerVisionAPIKey;
+            });
     }
 }

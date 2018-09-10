@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebApplicationBasic.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AzureToolkit
 {
@@ -20,6 +22,9 @@ namespace AzureToolkit
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connection = @"Server=tcp:azuretoolkit-westfaliatraining.database.windows.net,1433;Initial Catalog=azuretoolkit;Persist Security Info=False;User ID=atk_westfaliausa_admin;Password=i'm USING a REALLY secure PASSWORD right? :);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            services.AddDbContext<AzureToolkitContext>(options => options.UseSqlServer(connection));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // In production, the Angular files will be served from this directory
