@@ -3,7 +3,8 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import { SettingsResponse } from '../models/settingsResponse';
+import { SettingsResponse, SettingsRequest } from '../models/settingsResponse';
+import { ImagePostRequest } from '../models/imagePostRequest';
 
 @Injectable()
 export class AzureToolkitService {
@@ -13,12 +14,12 @@ export class AzureToolkitService {
         this.baseUrl = originUrl;
     }
 
-    public getSettings(settingsRequest: { token: string }): Observable<SettingsResponse> {
+    public getSettings(settingsRequest: SettingsRequest): Observable<SettingsResponse> {
         return this.http.post<SettingsResponse>(`${this.baseUrl}api/settings`, settingsRequest)
         .catch(this.handleError);
     }
 
-    public saveImage(imagePostRequest: { url: string, id: string, encodingFormat: string}): Observable<boolean> {
+    public saveImage(imagePostRequest: ImagePostRequest): Observable<boolean> {
         return this.http.post<Response>(`${this.baseUrl}api/images`, imagePostRequest)
             .map(response => {
                 return response == null ? false : (response as Response).ok;

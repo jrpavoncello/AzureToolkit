@@ -17,7 +17,6 @@ export class CognitiveService {
     searchImages(bingSearchApiKey: string, searchTerm: string): Observable<BingSearchResponse> {
         if (bingSearchApiKey === null) {
             const errorMsg = 'Bing search API key was null.';
-            console.error(errorMsg);
             return new ErrorObservable(errorMsg);
         }
 
@@ -29,7 +28,6 @@ export class CognitiveService {
     analyzeImage(computerVisionAPIKey: string, request: ComputerVisionRequest): Observable<ComputerVisionResponse> {
         if (computerVisionAPIKey === null) {
             const errorMsg = 'Bing computer vision API key was null.';
-            console.error(errorMsg);
             return new ErrorObservable(errorMsg);
         }
 

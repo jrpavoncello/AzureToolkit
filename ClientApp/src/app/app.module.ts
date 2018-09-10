@@ -32,7 +32,7 @@ import { UserService } from './common/services/user.service';
       { path: 'search', component: SearchComponent },
     ])
   ],
-  providers: [DateService, SearchComponent, UserService],
+  providers: [DateService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

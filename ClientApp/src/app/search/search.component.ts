@@ -3,7 +3,11 @@ import { CognitiveService } from '../common/services/cognitive.service';
 import { AzureToolkitService } from '../common/services/azureToolkit.service';
 import { ImageResult } from '../common/models/bingSearchResponse';
 import { ComputerVisionRequest, ComputerVisionResponse } from '../common/models/computerVisionResponse';
-import { SettingsRequest } from '../common/models/settingsResponse';
+import { SettingsResponse, SettingsRequest } from '../common/models/settingsResponse';
+import { ImagePostRequest } from '../common/models/imagePostRequest';
+import { UserService } from '../common/services/user.service';
+import { User } from '../common/models/user';
+import { isUndefined } from 'util';
 
 @Component({
     selector: 'search',
@@ -15,13 +19,17 @@ export class SearchComponent implements OnInit {
     computerVisionAPIKey: string | null = null;
     searchResults: ImageResult[] | null;
     isSearching = false;
+    user: User;
 
     currentAnalytics: ComputerVisionResponse | null;
     currentItem: ImageResult;
     currentItemSaved: boolean;
     isAnalyzing = false;
 
-    constructor(private cognitiveService: CognitiveService, private azureToolkitService: AzureToolkitService) { }
+    constructor(
+        private cognitiveService: CognitiveService,
+        private azureToolkitService: AzureToolkitService,
+        private userService: UserService) { }
 
     search(searchTerm: string) {
         this.searchResults = null;
@@ -42,18 +50,25 @@ export class SearchComponent implements OnInit {
         .analyzeImage(
             this.computerVisionAPIKey,
             { url: result.thumbnailUrl } as ComputerVisionRequest)
-        .subscribe(result => {
-            this.currentAnalytics = result;
+        .subscribe(cvResponse => {
+            this.currentAnalytics = cvResponse;
             this.isAnalyzing = false;
         });
         window.scroll(0, 0);
     }
 
     saveImage() {
-        const request = {
-            url: this.currentItem.thumbnailUrl,
-            encodingFormat: this.currentItem.encodingFormat,
-            id: this.currentItem.imageId
+        let userId = '';
+        if (!isUndefined(this.user)) {
+            userId = this.user.userId;
+        }
+        const request: ImagePostRequest = {
+             userId: userId,
+             url: this.currentItem.thumbnailUrl,
+             encodingFormat: this.currentItem.encodingFormat,
+             id: this.currentItem.imageId,
+             description: this.currentAnalytics.description.captions[0].text,
+             tags: this.currentAnalytics.tags.map(tag => tag.name)
         };
         this.azureToolkitService.saveImage(request).subscribe(saveSuccessful => {
             this.currentItemSaved = saveSuccessful;
@@ -67,5 +82,6 @@ export class SearchComponent implements OnInit {
                 this.bingSearchApiKey = response.bingSearchApiKey;
                 this.computerVisionAPIKey = response.computerVisionAPIKey;
             });
+        this.userService.getUser().subscribe(user => this.user = user );
     }
 }
