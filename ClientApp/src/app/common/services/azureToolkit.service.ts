@@ -20,7 +20,7 @@ export class AzureToolkitService {
     public saveImage(imagePostRequest: { url: string, id: string, encodingFormat: string}): Observable<boolean> {
         return this.http.post<Response>(`${this.baseUrl}api/images`, imagePostRequest)
             .map(response => {
-                return response.ok;
+                return response == null ? false : (response as Response).ok;
             }).catch(this.handleError);
     }
 }

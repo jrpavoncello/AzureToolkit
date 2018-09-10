@@ -14,7 +14,7 @@ export class SearchComponent {
     isSearching = false;
 
     currentAnalytics: ComputerVisionResponse | null;
-    currentItem: ImageResult | null;
+    currentItem: ImageResult;
     currentItemSaved: boolean;
     isAnalyzing = false;
 

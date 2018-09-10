@@ -30,7 +30,7 @@
             {
                 await blockBlob.UploadFromStreamAsync(stream);
             }
-            return Ok();
+            return Ok(new { ok = true });
         }
      }
 
