@@ -46,20 +46,20 @@ namespace WebApplicationBasic.Controllers
                 await blockBlob.UploadFromStreamAsync(stream);
             }
 
-            //Save metadata
-            var savedImage = new SavedImage();
-            savedImage.UserId = request.UserId;
-            savedImage.Description = request.Description;
-            savedImage.StorageUrl = blockBlob.Uri.ToString();
-            savedImage.Tags = new List<SavedImageTag>();
+            // //Save metadata
+            // var savedImage = new SavedImage();
+            // savedImage.UserId = request.UserId;
+            // savedImage.Description = request.Description;
+            // savedImage.StorageUrl = blockBlob.Uri.ToString();
+            // savedImage.Tags = new List<SavedImageTag>();
 
-            foreach(var tag in request.Tags)
-            {
-                savedImage.Tags.Add(new SavedImageTag() {Tag = tag});
-            }
+            // foreach(var tag in request.Tags)
+            // {
+            //     savedImage.Tags.Add(new SavedImageTag() {Tag = tag});
+            // }
 
-            context.Add(savedImage);
-            context.SaveChanges();
+            // context.Add(savedImage);
+            // context.SaveChanges();
 
             return Ok(new { ok = true });
         }
