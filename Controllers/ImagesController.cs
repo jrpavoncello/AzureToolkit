@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.Azure.Search;
+using Microsoft.Azure.Search.Models;
 
 namespace WebApplicationBasic.Controllers
 {
@@ -62,6 +64,27 @@ namespace WebApplicationBasic.Controllers
             context.SaveChanges();
 
             return Ok(new { ok = true });
+        }
+
+        [HttpGet("{userId}")]
+        public IActionResult GetImages(string userID)
+        {
+            var images = this.context.SavedImages.Where(image => image.UserId == userID);
+            return Ok(images);
+        }
+
+        [HttpGet("search/{userId}/{term}")]
+        public IActionResult SearchImages(string userId, string term)
+        {
+            var searchServiceName = this.config.GetValue<string>("searchServiceName");
+            var queryApiKey = this.config.GetValue<string>("queryApiKey");
+
+            SearchIndexClient indexClient = new SearchIndexClient(searchServiceName, "description", new SearchCredentials(queryApiKey));
+
+            SearchParameters parameters = new SearchParameters() { Filter = $"UserId eq '{userId}'" };
+            DocumentSearchResult<SavedImage> results = indexClient.Documents.Search<SavedImage>(term, parameters);
+
+            return Ok(results.Results.Select((savedImage) => savedImage.Document));
         }
     }
 

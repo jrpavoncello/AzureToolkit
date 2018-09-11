@@ -11,6 +11,7 @@ import { SearchComponent } from './search/search.component';
 import { DateService } from './date/date.service';
 import { CommonModule } from './common/common.module';
 import { UserService } from './common/services/user.service';
+import { GalleryComponent } from './common/gallery/gallery.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { UserService } from './common/services/user.service';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'search', component: SearchComponent },
+      { path: 'gallery', component: GalleryComponent }
     ])
   ],
   providers: [DateService, UserService],
