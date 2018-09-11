@@ -78,8 +78,12 @@ namespace WebApplicationBasic.Controllers
         {
             var searchServiceName = this.config.GetValue<string>("searchServiceName");
             var queryApiKey = this.config.GetValue<string>("queryApiKey");
+            var searchServiceIndexName = this.config.GetValue<string>("searchServiceIndexName");
 
-            SearchIndexClient indexClient = new SearchIndexClient(searchServiceName, "description", new SearchCredentials(queryApiKey));
+            SearchIndexClient indexClient = new SearchIndexClient(
+                searchServiceName, 
+                searchServiceIndexName, 
+                new SearchCredentials(queryApiKey));
 
             SearchParameters parameters = new SearchParameters() { Filter = $"UserId eq '{userId}'" };
             DocumentSearchResult<SavedImage> results = indexClient.Documents.Search<SavedImage>(term, parameters);
