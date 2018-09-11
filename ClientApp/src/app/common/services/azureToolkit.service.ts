@@ -21,7 +21,7 @@ export class AzureToolkitService {
     }
 
     public getImages(userId: string): Observable<SavedImage[]> {
-        return this.http.get<SavedImage[]>(`${this.baseUrl}/api/images/${userId}`)
+        return this.http.get<SavedImage[]>(`${this.baseUrl}api/images/${userId}`)
             .catch(this.handleError);
     }
 
@@ -33,7 +33,7 @@ export class AzureToolkitService {
     }
     
     public searchImage(userId: string, searchTerm: string): Observable<SavedImage[]> {
-        return this.http.post<SavedImage[]>(`${this.baseUrl}/api/images/search/${userId}/${searchTerm}`, null)
+        return this.http.post<SavedImage[]>(`${this.baseUrl}api/images/search/${userId}/${searchTerm}`, null)
         .catch(this.handleError);
     }
 
