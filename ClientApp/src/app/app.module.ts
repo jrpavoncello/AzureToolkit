@@ -11,14 +11,15 @@ import { SearchComponent } from './search/search.component';
 import { DateService } from './date/date.service';
 import { CommonModule } from './common/common.module';
 import { UserService } from './common/services/user.service';
-import { GalleryComponent } from './common/gallery/gallery.component';
+import { GalleryComponent } from './gallery/gallery.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    SearchComponent
+    SearchComponent,
+    GalleryComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../common/services/user.service';
-import { User } from '../../common/models/user';
-import { AzureToolkitService } from '../../common/services/azureToolkit.service';
-import { SavedImage } from '../../common/models/savedImage';
-import { SettingsResponse, SettingsRequest } from '../models/settingsResponse';
+import { UserService } from '../common/services/user.service';
+import { User } from '../common/models/user';
+import { AzureToolkitService } from '../common/services/azureToolkit.service';
+import { SavedImage } from '../common/models/savedImage';
 
 @Component({
     selector: 'gallery',
